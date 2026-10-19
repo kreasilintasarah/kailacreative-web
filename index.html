@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KaiLA Creative - Autonomous Agentic AI & Next-Gen Digital Ecosystems</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#050507',
+                        darkCard: 'rgba(12, 12, 18, 0.85)',
+                        zincBorder: 'rgba(255, 255, 255, 0.12)',
+                        neonWhite: '#FFFFFF',
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'glow-white': 'glowWhite 3s ease-in-out infinite alternate',
+                    },
+                    keyframes: {
+                        glowWhite: {
+                            '0%': { boxShadow: '0 0 10px rgba(255, 255, 255, 0.08)' },
+                            '100%': { boxShadow: '0 0 25px rgba(255, 255, 255, 0.30)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #050507;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #1e2029;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ffffff;
+        }
+
+        .bg-grid-pattern {
+            background-size: 50px 50px;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        }
+
+        .glass-panel {
+            background: rgba(12, 12, 18, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .glass-panel-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-panel-hover:hover {
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.12);
+            transform: translateY(-3px);
+        }
+
+        .icon-box {
+            background: rgba(24, 24, 27, 0.9);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            color: #ffffff;
+            transition: all 0.3s ease;
+        }
+
+        .group:hover .icon-box {
+            background: #ffffff;
+            color: #000000;
+            border-color: #ffffff;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+        }
+
+        #particleCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+    </style>
+</head>
+<body class="bg-darkBg text-gray-200 font-sans selection:bg-white selection:text-black relative overflow-x-hidden">
+
+    <!-- Interactive Particle Background Canvas -->
+    <canvas id="particleCanvas"></canvas>
+
+    <!-- Background Grid Effect -->
+    <div class="fixed inset-0 bg-grid-pattern pointer-events-none z-0"></div>
+
+    <!-- MAIN CONTAINER -->
+    <div class="relative z-10 flex flex-col min-h-screen">
+
+        <!-- HEADER / NAVBAR -->
+        <header class="fixed top-0 left-0 right-0 z-50 glass-panel border-b border-white/10 transition-all duration-300">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+                
+                <!-- BRAND LOGO -->
+                <a href="#" class="flex items-center gap-3 group cursor-pointer">
+                    <div class="w-10 h-10 rounded-xl bg-white text-black font-black flex items-center justify-center text-xl shadow-[0_0_20px_rgba(255,255,255,0.4)] group-hover:scale-105 transition-all duration-300">
+                        K
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-xl sm:text-2xl font-black tracking-tight text-white leading-none group-hover:text-gray-300 transition-colors">
+                            KaiLA
+                        </span>
+                        <span class="text-[11px] font-mono tracking-widest text-gray-400 uppercase font-semibold">creative</span>
+                    </div>
+                </a>
+
+                <!-- DESKTOP NAVIGATION -->
+                <nav class="hidden md:flex items-center space-x-8 text-sm font-medium text-gray-300">
+                    <a href="#ecosystem" class="hover:text-white transition-colors">Ecosystem</a>
+                    <a href="#agentic-erp" class="hover:text-white transition-colors">Agentic AI ERP</a>
+                    <a href="#solutions" class="hover:text-white transition-colors">Solutions</a>
+                    <a href="#impact" class="hover:text-white transition-colors">Impact</a>
+                    <a href="#simulator" class="hover:text-white transition-colors">Simulator</a>
+                </nav>
+
+                <!-- HEADER CTA & STATUS BADGE -->
+                <div class="hidden sm:flex items-center space-x-4">
+                    <div class="hidden xl:flex items-center space-x-2 px-3 py-1 rounded-full glass-panel text-[11px] text-gray-300 font-mono border border-white/10">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                        <span>SWARM ENGINE ONLINE</span>
+                    </div>
+                    <a href="#contact" class="relative group px-6 py-2.5 rounded-full text-xs font-extrabold uppercase tracking-wider text-black bg-white hover:bg-gray-200 transition-all duration-300 shadow-[0_0_20px_rgba(255,255,255,0.3)] flex items-center gap-2">
+                        <span>Launch App / Contact</span>
+                        <i data-lucide="arrow-up-right" class="w-4 h-4"></i>
+                    </a>
+                </div>
+
+                <!-- MOBILE MENU BUTTON -->
+                <button id="mobileMenuBtn" class="md:hidden text-gray-300 hover:text-white focus:outline-none p-2" aria-label="Toggle Menu">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
+
+            <!-- MOBILE NAVIGATION MENU -->
+            <div id="mobileMenu" class="hidden md:hidden glass-panel border-t border-white/10 px-4 pt-4 pb-6 space-y-3">
+                <a href="#ecosystem" class="mobile-link block text-gray-300 hover:text-white py-2 text-base font-medium">Ecosystem</a>
+                <a href="#agentic-erp" class="mobile-link block text-gray-300 hover:text-white py-2 text-base font-medium">Agentic AI ERP</a>
+                <a href="#solutions" class="mobile-link block text-gray-300 hover:text-white py-2 text-base font-medium">Solutions</a>
+                <a href="#impact" class="mobile-link block text-gray-300 hover:text-white py-2 text-base font-medium">Impact</a>
+                <a href="#simulator" class="mobile-link block text-gray-300 hover:text-white py-2 text-base font-medium">Simulator</a>
+                <a href="#contact" class="mobile-link block w-full text-center px-4 py-3 rounded-xl bg-white text-black font-extrabold text-sm uppercase mt-4">
+                    Launch App / Contact
+                </a>
+            </div>
+        </header>
+
+        <!-- HERO SECTION -->
+        <section id="hero" class="pt-36 pb-20 md:pt-48 md:pb-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full flex flex-col items-center text-center justify-center">
+            
+            <!-- STATUS BADGE -->
+            <div class="inline-flex items-center space-x-2.5 px-4 py-1.5 rounded-full glass-panel text-xs text-gray-300 border border-white/20 mb-8 animate-pulse-slow">
+                <span class="w-2 h-2 rounded-full bg-white animate-ping"></span>
+                <span class="font-mono tracking-wider text-gray-200 uppercase">Agentic AI Enterprise Core v4.0</span>
+            </div>
+
+            <!-- HERO HEADLINE -->
+            <h1 class="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black tracking-tight text-white max-w-5xl leading-none">
+                AUTONOMOUS INTELLIGENCE. <br class="hidden sm:block"/>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-300 to-gray-600">UNLIMITED SCALE.</span>
+            </h1>
+
+            <!-- HERO SUBTITLE -->
+            <p class="mt-6 text-base sm:text-lg md:text-xl text-gray-400 max-w-3xl font-light leading-relaxed">
+                <strong class="text-white font-semibold">KaiLA Creative</strong> engineers autonomous Agentic AI ERP infrastructure, high-converting affiliate execution engines, intelligent workflow automation, and algorithmic digital growth products.
+            </p>
+
+            <!-- ACTION BUTTONS -->
+            <div class="mt-10 flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto">
+                <a href="#solutions" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-white text-black font-black text-xs uppercase tracking-widest hover:bg-gray-200 transition-all duration-300 shadow-[0_0_25px_rgba(255,255,255,0.3)] flex items-center justify-center gap-2 group">
+                    <span>Explore Platform</span>
+                    <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+                </a>
+                <button onclick="openTerminalModal()" class="w-full sm:w-auto px-8 py-4 rounded-xl glass-panel text-white border border-white/20 font-bold text-xs uppercase tracking-widest hover:bg-white/10 transition-all duration-300 flex items-center justify-center gap-2">
+                    <i data-lucide="terminal" class="w-4 h-4"></i>
+                    <span>Simulate Agent Swarm</span>
+                </button>
+            </div>
+
+            <!-- STATS STRIP -->
+            <div class="mt-20 w-full grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 pt-10 border-t border-white/10">
+                <div class="glass-panel p-6 rounded-2xl text-center glass-panel-hover transition-all">
+                    <p class="font-mono text-3xl sm:text-4xl font-black text-white">99.8%</p>
+                    <p class="text-[11px] text-gray-400 mt-1 font-mono uppercase tracking-wider">Operational Efficiency</p>
+                </div>
+                <div class="glass-panel p-6 rounded-2xl text-center glass-panel-hover transition-all">
+                    <p class="font-mono text-3xl sm:text-4xl font-black text-white">$50M+</p>
+                    <p class="text-[11px] text-gray-400 mt-1 font-mono uppercase tracking-wider">Generated Revenue</p>
+                </div>
+                <div class="glass-panel p-6 rounded-2xl text-center glass-panel-hover transition-all">
+                    <p class="font-mono text-3xl sm:text-4xl font-black text-white">10M+</p>
+                    <p class="text-[11px] text-gray-400 mt-1 font-mono uppercase tracking-wider">Automated Tasks / Day</p>
+                </div>
+                <div class="glass-panel p-6 rounded-2xl text-center glass-panel-hover transition-all">
+                    <p class="font-mono text-3xl sm:text-4xl font-black text-white">&lt; 12ms</p>
+                    <p class="text-[11px] text-gray-400 mt-1 font-mono uppercase tracking-wider">Decision Swarm Latency</p>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- PRODUCT VERTICALS SECTION -->
+        <section id="solutions" class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
+            <div id="ecosystem" class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="text-xs font-mono text-gray-400 uppercase tracking-widest mb-2">[ Product Architecture ]</h2>
+                <h3 class="text-3xl sm:text-5xl font-bold text-white tracking-tight">KaiLA Creative</h3>
+                <p class="text-gray-400 mt-4 text-sm sm:text-base">Built for hyper-scaling enterprises, zero-friction automation, and dynamic digital assets.</p>
+            </div>
+
+            <!-- 5 PRODUCTS VERTICAL GRID -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                
+                <!-- PRODUCT 1: AGENTIC AI ERP SOFTWARE -->
+                <div id="agentic-erp" class="glass-panel p-8 rounded-3xl glass-panel-hover transition-all duration-300 relative overflow-hidden group border border-white/20 lg:col-span-2">
+                    <div class="flex items-center justify-between mb-6">
+                        <!-- DISTINCT DARK ICON BOX WITH HIGH CONTRAST SVG -->
+                        <div class="w-14 h-14 rounded-2xl icon-box flex items-center justify-center">
+                            <i data-lucide="cpu" class="w-7 h-7"></i>
+                        </div>
+                        <span class="text-[10px] font-mono px-3 py-1 rounded-full bg-white/10 text-white border border-white/20 uppercase tracking-widest">Autonomous Core</span>
+                    </div>
+                    <span class="text-xs font-mono text-gray-400 uppercase tracking-wider">Vertical 01</span>
+                    <h4 class="text-2xl sm:text-3xl font-black text-white mt-1 mb-3">Agentic AI ERP Software</h4>
+                    <p class="text-gray-300 text-sm leading-relaxed mb-6">
+                        Next-generation enterprise resource planning powered by multi-agent AI networks. Orchestrate finance, inventory, supply chains, customer workflows, and operational decision-making with zero manual friction.
+                    </p>
+                    <div class="grid sm:grid-cols-2 gap-3 text-xs font-mono text-gray-300 mb-6">
+                        <div class="flex items-center gap-2"><i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i> Multi-Agent Neural Swarms</div>
+                        <div class="flex items-center gap-2"><i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i> Predictive Resource Allocation</div>
+                        <div class="flex items-center gap-2"><i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i> Autonomous Ledger & Invoicing</div>
+                        <div class="flex items-center gap-2"><i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400"></i> Self-Healing Logistics Pipelines</div>
+                    </div>
+                    <button onclick="openTerminalModal()" class="inline-flex items-center gap-2 text-xs font-bold font-mono text-white hover:underline">
+                        <span>SIMULATE AGENT WORKFLOW</span>
+                        <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                    </button>
+                </div>
+
+                <!-- PRODUCT 2: AFFILIATE ECOSYSTEM & EXECUTION -->
+                <div class="glass-panel p-8 rounded-3xl glass-panel-hover transition-all duration-300 relative overflow-hidden group">
+                    <div class="w-14 h-14 rounded-2xl icon-box flex items-center justify-center mb-6">
+                        <i data-lucide="network" class="w-7 h-7"></i>
+                    </div>
+                    <span class="text-xs font-mono text-gray-400 uppercase tracking-wider">Vertical 02</span>
+                    <h4 class="text-xl font-bold text-white mt-1 mb-3">Affiliate Ecosystem & Execution Engine</h4>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                        End-to-end performance affiliate architecture engineered for maximum conversion velocity, automated payouts, dynamic tracking, and partner scale.
+                    </p>
+                    <ul class="space-y-2 text-xs font-mono text-gray-300">
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-white"></i> Real-time Conversion Attribution</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-white"></i> Automated Multi-Currency Payouts</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-white"></i> Anti-Fraud Dynamic Intelligence</li>
+                    </ul>
+                </div>
+
+                <!-- PRODUCT 3: AI-DRIVEN DIGITAL AUTOMATION -->
+                <div class="glass-panel p-8 rounded-3xl glass-panel-hover transition-all duration-300 relative overflow-hidden group">
+                    <div class="w-14 h-14 rounded-2xl icon-box flex items-center justify-center mb-6">
+                        <i data-lucide="bot" class="w-7 h-7"></i>
+                    </div>
+                    <span class="text-xs font-mono text-gray-400 uppercase tracking-wider">Vertical 03</span>
+                    <h4 class="text-xl font-bold text-white mt-1 mb-3">AI-Driven Digital Automation</h4>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                        Connect disjointed enterprise software stacks using autonomous scripts, webhook neural bridges, and custom zero-touch intelligent bots.
+                    </p>
+                    <ul class="space-y-2 text-xs font-mono text-gray-300">
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-white"></i> Zero-Code Intelligent Bot Integration</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-white"></i> High-Throughput Webhook Engines</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-white"></i> Process Bottleneck Optimization</li>
+                    </ul>
+                </div>
+
+                <!-- PRODUCT 4: SOCIAL MEDIA GROWTH PLATFORM -->
+                <div class="glass-panel p-8 rounded-3xl glass-panel-hover transition-all duration-300 relative overflow-hidden group">
+                    <div class="w-14 h-14 rounded-2xl icon-box flex items-center justify-center mb-6">
+                        <i data-lucide="trending-up" class="w-7 h-7"></i>
+                    </div>
+                    <span class="text-xs font-mono text-gray-400 uppercase tracking-wider">Vertical 04</span>
+                    <h4 class="text-xl font-bold text-white mt-1 mb-3">Social Media Growth Platform</h4>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                        Data-driven viral content engineering, automated distribution, and algorithmic audience expansion tools powered by predictive social trends.
+                    </p>
+                    <ul class="space-y-2 text-xs font-mono text-gray-300">
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-white"></i> Predictive Viral Trend Analytics</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-white"></i> Cross-Channel Omnipresence Engines</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-white"></i> Automated Asset Optimization</li>
+                    </ul>
+                </div>
+
+                <!-- PRODUCT 5: CREATIVE DIGITAL ASSETS & PRODUCTS -->
+                <div class="glass-panel p-8 rounded-3xl glass-panel-hover transition-all duration-300 relative overflow-hidden group">
+                    <div class="w-14 h-14 rounded-2xl icon-box flex items-center justify-center mb-6">
+                        <i data-lucide="sparkles" class="w-7 h-7"></i>
+                    </div>
+                    <span class="text-xs font-mono text-gray-400 uppercase tracking-wider">Vertical 05</span>
+                    <h4 class="text-xl font-bold text-white mt-1 mb-3">Creative Digital Assets & Products</h4>
+                    <p class="text-gray-400 text-sm leading-relaxed mb-6">
+                        Ultra-modern UI/UX design systems, cyberpunk web templates, AI prompt libraries, and production-ready digital toolkits.
+                    </p>
+                    <ul class="space-y-2 text-xs font-mono text-gray-300">
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-white"></i> High-Speed UI/UX Design Kits</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-white"></i> Verified AI Prompt Matrices</li>
+                        <li class="flex items-center gap-2"><i data-lucide="check" class="w-4 h-4 text-white"></i> Modular Code Component Libraries</li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- INTERACTIVE AGENTIC AI ERP SIMULATOR -->
+        <section id="simulator" class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
+            <div class="glass-panel rounded-3xl p-8 sm:p-12 border border-white/20 relative overflow-hidden">
+                <div class="text-center max-w-2xl mx-auto mb-10">
+                    <span class="px-3 py-1 rounded-full bg-white/10 border border-white/20 text-xs font-mono text-white uppercase tracking-widest">Interactive Calculator</span>
+                    <h3 class="text-3xl sm:text-4xl font-bold text-white mt-3">Agentic AI ERP ROI Simulator</h3>
+                    <p class="text-gray-400 text-sm mt-2">Model your operational efficiency, cost reduction, and time savings under KaiLA's autonomous agent infrastructure.</p>
+                </div>
+
+                <div class="grid lg:grid-cols-2 gap-10 items-center">
+                    
+                    <!-- SLIDERS -->
+                    <div class="space-y-8">
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="text-sm font-semibold text-white">Organization Size (Employees)</label>
+                                <span id="empValue" class="font-mono text-white font-bold">50 Employees</span>
+                            </div>
+                            <input type="range" id="empSlider" min="5" max="500" step="5" value="50" 
+                                class="w-full h-2 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-white">
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="text-sm font-semibold text-white">Monthly Active Workflows / Operations</label>
+                                <span id="workflowValue" class="font-mono text-white font-bold">25,000 Tasks</span>
+                            </div>
+                            <input type="range" id="workflowSlider" min="5000" max="500000" step="5000" value="25000" 
+                                class="w-full h-2 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-white">
+                        </div>
+
+                        <div>
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="text-sm font-semibold text-white">Agent Swarm Tier</label>
+                                <span id="swarmText" class="font-mono text-white font-bold">Multi-Agent Swarm</span>
+                            </div>
+                            <div class="grid grid-cols-3 gap-3">
+                                <button onclick="setSwarmDensity(1, 'Standard Swarm')" class="swarm-btn py-2.5 rounded-xl border border-white/10 bg-black/40 text-xs font-mono text-gray-400 hover:text-white transition-all">Standard</button>
+                                <button onclick="setSwarmDensity(2, 'Multi-Agent Swarm')" class="swarm-btn active py-2.5 rounded-xl border border-white/40 bg-white/10 text-xs font-mono text-white transition-all">Advanced</button>
+                                <button onclick="setSwarmDensity(3, 'Neural Enterprise Matrix')" class="swarm-btn py-2.5 rounded-xl border border-white/10 bg-black/40 text-xs font-mono text-gray-400 hover:text-white transition-all">Enterprise</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ESTIMATED RESULTS PANEL -->
+                    <div class="glass-panel p-8 rounded-2xl border border-white/20 bg-black/70 space-y-6">
+                        <h4 class="text-xs font-mono text-gray-400 uppercase tracking-widest border-b border-white/10 pb-3">Projected Autonomous Metrics</h4>
+                        
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <p class="text-xs text-gray-400">Hours Reclaimed / Mo</p>
+                                <p id="reclaimedHours" class="text-2xl sm:text-4xl font-black text-white font-mono mt-1">420 Hrs</p>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-400">Estimated Cost Reduction</p>
+                                <p id="costReduction" class="text-2xl sm:text-4xl font-black text-emerald-400 font-mono mt-1">82%</p>
+                            </div>
+                        </div>
+
+                        <div class="p-4 rounded-xl bg-white/5 border border-white/10">
+                            <p class="text-xs text-gray-300 leading-relaxed">
+                                <strong class="text-white">Neural Projection:</strong> Deploying KaiLA Agentic AI ERP provides an estimated annual savings of <span id="annualSavings" class="text-white font-mono font-bold">$126,000</span> with execution velocity increased by <span id="velocityBoost" class="text-white font-mono font-bold">5.4x</span>.
+                            </p>
+                        </div>
+
+                        <a href="#contact" class="block text-center w-full py-3.5 rounded-xl bg-white text-black font-extrabold text-xs uppercase tracking-wider hover:bg-gray-200 transition-colors">
+                            Request Enterprise Deployment Quote
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- IMPACT & METRICS SECTION -->
+        <section id="impact" class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
+            <div class="glass-panel p-8 sm:p-12 rounded-3xl border border-white/10 flex flex-col lg:flex-row items-center justify-between gap-8">
+                <div class="max-w-xl">
+                    <span class="text-xs font-mono text-gray-400 uppercase tracking-widest">[ Proven Enterprise Velocity ]</span>
+                    <h3 class="text-3xl sm:text-4xl font-bold text-white tracking-tight mt-2">Trusted Across Global Digital Networks</h3>
+                    <p class="text-gray-400 text-sm mt-3 leading-relaxed">
+                        KaiLA Creative powers mission-critical operations across global enterprises, blending zero-latency autonomous agents with high-converting digital products.
+                    </p>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-3 gap-6 w-full lg:w-auto">
+                    <div class="p-4 border-l-2 border-white">
+                        <p class="text-3xl font-black text-white font-mono">$50M+</p>
+                        <p class="text-xs text-gray-400 uppercase font-mono mt-1">Processed Volume</p>
+                    </div>
+                    <div class="p-4 border-l-2 border-white">
+                        <p class="text-3xl font-black text-white font-mono">100M+</p>
+                        <p class="text-xs text-gray-400 uppercase font-mono mt-1">Audience Reach</p>
+                    </div>
+                    <div class="p-4 border-l-2 border-white col-span-2 sm:col-span-1">
+                        <p class="text-3xl font-black text-white font-mono">99.9%</p>
+                        <p class="text-xs text-gray-400 uppercase font-mono mt-1">System Uptime</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CONTACT / CONSULTATION SECTION -->
+        <section id="contact" class="py-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
+            <div class="grid lg:grid-cols-2 gap-12 items-start">
+                
+                <!-- CONTACT INFO -->
+                <div>
+                    <h2 class="text-xs font-mono text-gray-400 uppercase tracking-widest mb-2">[ Deploy KaiLA Creative ]</h2>
+                    <h3 class="text-3xl sm:text-5xl font-bold text-white tracking-tight">Ready to Automate Your Digital Infrastructure?</h3>
+                    <p class="text-gray-400 mt-4 text-sm sm:text-base leading-relaxed">
+                        Connect with our core system architects to discuss custom Agentic AI ERP deployments, affiliate ecosystem architecture, or visual digital design products.
+                    </p>
+
+                    <div class="mt-8 space-y-6">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-10 h-10 rounded-xl icon-box flex items-center justify-center">
+                                <i data-lucide="mail" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-500 font-mono uppercase">Direct Inquiries</p>
+                                <p class="text-sm font-semibold text-white">hello@kailacreative.my.id</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center space-x-4">
+                            <div class="w-10 h-10 rounded-xl icon-box flex items-center justify-center">
+                                <i data-lucide="shield-check" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-500 font-mono uppercase">Security Standard</p>
+                                <p class="text-sm font-semibold text-white">End-to-End Encrypted Agent Swarm Protocol</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center space-x-4">
+                            <div class="w-10 h-10 rounded-xl icon-box flex items-center justify-center">
+                                <i data-lucide="zap" class="w-5 h-5"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-gray-500 font-mono uppercase">Deployment SLA</p>
+                                <p class="text-sm font-semibold text-white">Rapid AI Integration & Engineering Support</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FORM MODULE -->
+                <div class="glass-panel p-8 rounded-3xl border border-white/20">
+                    <form id="contactForm" onsubmit="handleFormSubmit(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-xs font-mono text-gray-400 mb-2 uppercase">Full Name / Company</label>
+                            <input type="text" required placeholder="Enter your full name or enterprise" class="w-full px-4 py-3 rounded-xl bg-black/60 border border-white/10 text-white placeholder-gray-600 focus:outline-none focus:border-white transition-colors text-sm">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-mono text-gray-400 mb-2 uppercase">Business Email</label>
+                            <input type="email" required placeholder="name@company.com" class="w-full px-4 py-3 rounded-xl bg-black/60 border border-white/10 text-white placeholder-gray-600 focus:outline-none focus:border-white transition-colors text-sm">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-mono text-gray-400 mb-2 uppercase">Primary Focus Area</label>
+                            <select class="w-full px-4 py-3 rounded-xl bg-black/60 border border-white/10 text-gray-300 focus:outline-none focus:border-white transition-colors text-sm">
+                                <option value="erp">Agentic AI ERP Software</option>
+                                <option value="affiliate">Affiliate Ecosystem & Execution</option>
+                                <option value="automation">AI Digital Automation & Bots</option>
+                                <option value="social">Social Media Growth Platform</option>
+                                <option value="assets">Creative Digital Assets & Products</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-mono text-gray-400 mb-2 uppercase">Project Scope & Requirements</label>
+                            <textarea rows="4" required placeholder="Describe your operational goals, team size, or custom workflow needs..." class="w-full px-4 py-3 rounded-xl bg-black/60 border border-white/10 text-white placeholder-gray-600 focus:outline-none focus:border-white transition-colors text-sm"></textarea>
+                        </div>
+
+                        <button type="submit" class="w-full py-4 rounded-xl bg-white text-black font-black text-xs uppercase tracking-widest hover:bg-gray-200 transition-all duration-300 shadow-[0_0_20px_rgba(255,255,255,0.3)]">
+                            Submit Inquiry
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- FOOTER -->
+        <footer class="mt-auto border-t border-white/10 py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
+                <!-- FOOTER LOGO -->
+                <div class="flex flex-col">
+                    <span class="text-2xl font-black text-white tracking-tight">KaiLA</span>
+                    <span class="text-xs text-gray-400 font-mono tracking-widest uppercase">creative</span>
+                </div>
+
+                <!-- COPYRIGHT -->
+                <p class="text-xs font-mono text-gray-500">
+                    &copy; 2026 KaiLA Creative. All Rights Reserved. Autonomous Digital Ecosystems.
+                </p>
+
+                <!-- SOCIAL LINKS -->
+                <div class="flex items-center space-x-4 text-gray-400">
+                    <a href="#" class="hover:text-white transition-colors" aria-label="Twitter"><i data-lucide="twitter" class="w-5 h-5"></i></a>
+                    <a href="#" class="hover:text-white transition-colors" aria-label="GitHub"><i data-lucide="github" class="w-5 h-5"></i></a>
+                    <a href="#" class="hover:text-white transition-colors" aria-label="LinkedIn"><i data-lucide="linkedin" class="w-5 h-5"></i></a>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- LIVE TERMINAL MODAL -->
+    <div id="terminalModal" class="fixed inset-0 z-50 hidden flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
+        <div class="glass-panel max-w-2xl w-full p-6 sm:p-8 rounded-3xl border border-white/30 relative text-left">
+            <button onclick="closeTerminalModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+            <div class="flex items-center space-x-2 border-b border-white/10 pb-3 mb-4">
+                <span class="w-3 h-3 rounded-full bg-red-500"></span>
+                <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
+                <span class="w-3 h-3 rounded-full bg-green-500"></span>
+                <span class="font-mono text-xs text-gray-400 ml-2">kaila-agentic-erp://swarm-simulation</span>
+            </div>
+            
+            <div class="font-mono text-xs space-y-2 bg-black/90 p-4 rounded-xl border border-white/10 h-64 overflow-y-auto text-gray-300" id="terminalOutput">
+                <p class="text-gray-500">[SYSTEM INIT] KaiLA Agentic AI Orchestrator v4.0...</p>
+                <p class="text-white">[00:01] Swarm cluster connected with 16 sub-agents.</p>
+                <p class="text-gray-400">[00:02] Agent #1 (Finance Router) verifying general ledger entries...</p>
+                <p class="text-gray-400">[00:03] Agent #2 (Supply Chain Bot) auto-optimizing inventory thresholds...</p>
+                <p class="text-gray-400">[00:04] Agent #3 (Affiliate Engine) calculating payout distributions...</p>
+                <p class="text-emerald-400">[SWARM ONLINE] Autonomous tasks running with latency &lt; 12ms.</p>
+            </div>
+
+            <div class="mt-6 flex justify-end gap-3">
+                <button onclick="runTerminalStep()" class="px-4 py-2.5 rounded-xl bg-white/10 border border-white/20 text-white font-mono text-xs hover:bg-white/20 transition-all">
+                    Run Simulation Step
+                </button>
+                <button onclick="closeTerminalModal()" class="px-4 py-2.5 rounded-xl bg-white text-black font-extrabold text-xs uppercase tracking-wider hover:bg-gray-200 transition-all">
+                    Close Demo
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CUSTOM TOAST NOTIFICATION -->
+    <div id="notificationBox" class="fixed bottom-6 right-6 z-50 hidden glass-panel border border-white/30 text-white px-6 py-4 rounded-2xl shadow-2xl flex items-center space-x-3">
+        <i data-lucide="check-circle-2" class="w-5 h-5 text-emerald-400"></i>
+        <span id="notificationMessage" class="text-sm font-medium">Inquiry transmitted successfully!</span>
+    </div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Mobile Navigation Toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // Interactive Agentic AI ERP Simulator Logic
+        const empSlider = document.getElementById('empSlider');
+        const workflowSlider = document.getElementById('workflowSlider');
+        const empValue = document.getElementById('empValue');
+        const workflowValue = document.getElementById('workflowValue');
+        const reclaimedHours = document.getElementById('reclaimedHours');
+        const costReduction = document.getElementById('costReduction');
+        const annualSavings = document.getElementById('annualSavings');
+        const velocityBoost = document.getElementById('velocityBoost');
+
+        let currentSwarmDensity = 2; // Default to Tier 2 (Multi-Agent Swarm)
+
+        function updateSimulator() {
+            const employees = parseInt(empSlider.value);
+            const workflows = parseInt(workflowSlider.value);
+
+            empValue.innerText = employees + ' Employees';
+            workflowValue.innerText = workflows.toLocaleString('en-US') + ' Tasks';
+
+            const baseHoursSavedPerEmp = 8;
+            const multiplier = currentSwarmDensity === 1 ? 0.75 : currentSwarmDensity === 2 ? 1.0 : 1.35;
+            
+            const totalHoursSaved = Math.round(employees * baseHoursSavedPerEmp * multiplier + (workflows / 1000));
+            const reductionPct = Math.min(96, Math.round(65 + (currentSwarmDensity * 7) + (workflows / 40000)));
+            const estimatedDollarSaved = Math.round(totalHoursSaved * 25 * 12);
+            const boost = (2.5 + (workflows / 80000) * currentSwarmDensity).toFixed(1);
+
+            reclaimedHours.innerText = totalHoursSaved + ' Hrs';
+            costReduction.innerText = reductionPct + '%';
+            annualSavings.innerText = '$' + estimatedDollarSaved.toLocaleString('en-US');
+            velocityBoost.innerText = boost + 'x';
+        }
+
+        function setSwarmDensity(level, label) {
+            currentSwarmDensity = level;
+            document.getElementById('swarmText').innerText = label;
+            
+            const btns = document.querySelectorAll('.swarm-btn');
+            btns.forEach((btn, index) => {
+                if (index === level - 1) {
+                    btn.className = 'swarm-btn active py-2.5 rounded-xl border border-white/40 bg-white/10 text-xs font-mono text-white transition-all';
+                } else {
+                    btn.className = 'swarm-btn py-2.5 rounded-xl border border-white/10 bg-black/40 text-xs font-mono text-gray-400 hover:text-white transition-all';
+                }
+            });
+
+            updateSimulator();
+        }
+
+        empSlider.addEventListener('input', updateSimulator);
+        workflowSlider.addEventListener('input', updateSimulator);
+
+        // Terminal Demo Modal
+        function openTerminalModal() {
+            document.getElementById('terminalModal').classList.remove('hidden');
+        }
+
+        function closeTerminalModal() {
+            document.getElementById('terminalModal').classList.add('hidden');
+        }
+
+        function runTerminalStep() {
+            const term = document.getElementById('terminalOutput');
+            const steps = [
+                "[AGENT-SWARM] Re-balancing server instances across cloud clusters...",
+                "[AI-ERP] Auto-reconciling batch invoice tasks across 12 region nodes...",
+                "[AFFILIATE-ENGINE] Synthesizing tier structures for high-converting partners...",
+                "[AUTOMATION] Webhook throughput scaled to 15,000 requests/sec...",
+                "[GROWTH-ENGINE] Auto-generating trend analytics report for active campaigns..."
+            ];
+            const randomStep = steps[Math.floor(Math.random() * steps.length)];
+            const p = document.createElement('p');
+            p.className = 'text-white font-mono';
+            p.innerText = `[${new Date().toLocaleTimeString()}] ${randomStep}`;
+            term.appendChild(p);
+            term.scrollTop = term.scrollHeight;
+        }
+
+        // Notification System
+        function showNotification(msg) {
+            const notif = document.getElementById('notificationBox');
+            const notifMsg = document.getElementById('notificationMessage');
+            notifMsg.innerText = msg;
+            notif.classList.remove('hidden');
+            setTimeout(() => {
+                notif.classList.add('hidden');
+            }, 3500);
+        }
+
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            showNotification('Inquiry submitted! KaiLA Creative solutions team will respond shortly.');
+            e.target.reset();
+        }
+
+        // Particle Canvas Background Animation
+        const canvas = document.getElementById('particleCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let width, height;
+        let particles = [];
+
+        function resizeCanvas() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.vx = (Math.random() - 0.5) * 0.35;
+                this.vy = (Math.random() - 0.5) * 0.35;
+                this.radius = Math.random() * 1.5 + 0.5;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                if (this.x < 0 || this.x > width) this.vx *= -1;
+                if (this.y < 0 || this.y > height) this.vy *= -1;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+                ctx.fill();
+            }
+        }
+
+        function initParticles() {
+            particles = [];
+            const particleCount = Math.floor((width * height) / 20000);
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        initParticles();
+        window.addEventListener('resize', initParticles);
+
+        function animateCanvas() {
+            ctx.clearRect(0, 0, width, height);
+
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+
+                for (let j = i + 1; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const dist = Math.sqrt(dx * dx + dy * dy);
+
+                    if (dist < 110) {
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.strokeStyle = `rgba(255, 255, 255, ${0.12 * (1 - dist / 110)})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.stroke();
+                    }
+                }
+            }
+
+            requestAnimationFrame(animateCanvas);
+        }
+
+        window.onload = function() {
+            animateCanvas();
+            updateSimulator();
+        }
+    </script>
+</body>
+</html>
